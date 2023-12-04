@@ -1,6 +1,5 @@
-import NextAuthProvider from './context/NextAuthProvider';
+import NextAuthProvider from './_context/NextAuthProvider';
 import './globals.css';
-import { SessionProvider } from 'next-auth/react';
 
 export const metadata = {
   title: 'Create Next App',
