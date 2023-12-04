@@ -1,6 +1,6 @@
 'use client';
 import { useSession, signIn, signOut } from 'next-auth/react';
-import Nav from '@/app/_components/Nav';
+import Nav from '@/components/Nav';
 
 export default function Home() {
   const { data: session } = useSession();
