@@ -2,12 +2,14 @@
 
 import Layout from '@/components/Layout';
 import axios from 'axios';
+import { redirect } from 'next/navigation';
 import React, { useState } from 'react';
 
 const NewProduct = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
+  const [goToProducts, setGoToProducts] = useState(false);
   async function createProduct(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = { title, description, price };
@@ -18,6 +20,11 @@ const NewProduct = () => {
     } catch (error) {
       console.log(error);
     }
+
+    setGoToProducts(true);
+  }
+  if (goToProducts === true) {
+    redirect('/products');
   }
   return (
     <Layout>
