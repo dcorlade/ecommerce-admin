@@ -20,6 +20,7 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@types/multiparty": "^0.0.36",
     "@types/node": "^20.10.2",
     "@types/react": "18.2.41",
     "autoprefixer": "^10.0.1",
