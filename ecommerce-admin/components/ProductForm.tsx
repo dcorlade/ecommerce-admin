@@ -27,13 +27,13 @@ export default function ProductForm({
   title: existingTitle,
   description: existingDescription,
   price: existingPrice,
-  images,
+  images: existingImages,
 }: Props) {
   const [title, setTitle] = useState(existingTitle || '');
   const [description, setDescription] = useState(existingDescription || '');
   const [price, setPrice] = useState(existingPrice || '');
   const [goToProducts, setGoToProducts] = useState(false);
-
+  const [images, setImages] = useState(existingImages || []);
   async function saveProduct(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = { title, description, price };
@@ -71,6 +71,10 @@ export default function ProductForm({
       }
 
       const response = await axios.post('/api/upload', data);
+
+      setImages((oldImages) => {
+        return [...oldImages, ...response.data.links];
+      });
     }
   }
 
@@ -85,8 +89,14 @@ export default function ProductForm({
       />
 
       <label>Photos</label>
-      <div className="mb-2">
-        <label className="w-24 h-24 cursor-pointer border text-center flex flex-col items-center justify-center text-sm gap-1 text-gray-700 rounded-lg bg-gray-300">
+      <div className="mb-2 flex flex-wrap gap-2">
+        {!!images?.length &&
+          images.map((link) => (
+            <div key={link} className="inline-block h-24">
+              <img src={link} alt="" className="rounded-lg"></img>
+            </div>
+          ))}
+        <label className="inline-block w-24 h-24 cursor-pointer border text-center flex flex-col items-center justify-center text-sm gap-1 text-gray-700 rounded-lg bg-gray-300">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
