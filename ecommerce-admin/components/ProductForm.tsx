@@ -71,7 +71,6 @@ export default function ProductForm({
       }
 
       const response = await axios.post('/api/upload', data);
-      console.log(response.data);
     }
   }
 

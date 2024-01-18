@@ -1,6 +1,7 @@
 'use client';
 
 import Layout from '@/components/Layout';
+import LoadingPage from '@/components/LoadingPage';
 import axios from 'axios';
 import { Types } from 'mongoose';
 import Link from 'next/link';
@@ -15,12 +16,18 @@ interface Product {
 
 const Products = () => {
   const [products, setProducts] = useState<Array<Product>>([]);
+  const [isLoading, setIsLoading] = useState(true); // Add a loading state
 
   useEffect(() => {
     axios.get('/api/products').then((res) => {
       setProducts(res.data);
+      setIsLoading(false);
     });
   }, []);
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
 
   return (
     <Layout>
