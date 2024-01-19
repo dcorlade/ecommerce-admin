@@ -4,8 +4,9 @@ import axios from 'axios';
 import { create } from 'domain';
 import { Types } from 'mongoose';
 import { redirect } from 'next/navigation';
-import { FormEvent, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import Spinner from './Spinner';
+import { ItemInterface, ReactSortable } from 'react-sortablejs';
 
 type Props = {
   _id?: Types.ObjectId;
@@ -83,6 +84,10 @@ export default function ProductForm({
     }
   }
 
+  function updateImagesOrder(images) {
+    setImages(images);
+  }
+
   return (
     <form onSubmit={saveProduct}>
       <label>Product Name</label>
@@ -95,22 +100,28 @@ export default function ProductForm({
 
       <label>Photos</label>
       <div className="mb-2 flex flex-wrap gap-2">
-        {!!images?.length &&
-          images.map((link) => (
-            <div key={link} className="inline-block h-24 w-24 ">
-              <img
-                src={link}
-                alt=""
-                className="rounded-lg object-cover h-full w-full"
-              ></img>
-            </div>
-          ))}
+        <ReactSortable
+          list={images as any}
+          setList={updateImagesOrder}
+          className="flex flex-wrap gap-1"
+        >
+          {!!images?.length &&
+            images.map((link, index) => (
+              <div key={`${link}-${index}`} className="inline-block h-28 w-28 ">
+                <img
+                  src={link}
+                  alt=""
+                  className="rounded-lg object-cover h-full w-full"
+                ></img>
+              </div>
+            ))}
+        </ReactSortable>
         {isUploading && (
-          <div className="h-24 flex items-center gap-1">
+          <div className="h-28 flex items-center gap-1">
             <Spinner />
           </div>
         )}
-        <label className="w-24 h-24 cursor-pointer border text-center flex flex-col items-center justify-center text-sm gap-1 text-gray-700 rounded-lg bg-gray-300">
+        <label className="w-28 h-28 cursor-pointer border text-center flex flex-col items-center justify-center text-sm gap-1 text-gray-700 rounded-lg bg-gray-300">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
