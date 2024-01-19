@@ -6,12 +6,13 @@ import DeleteProductPage from '../../products/delete/[...id]/page';
 export async function POST(req: Request) {
   await mongooseConnect();
 
-  const { title, description, price } = await req.json();
+  const { title, description, price, images } = await req.json();
   // console.log({ title, description, price });
   const productDoc = await Product.create({
     title,
     description,
     price,
+    images,
   });
 
   return NextResponse.json(productDoc);
@@ -20,12 +21,12 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   await mongooseConnect();
 
-  const { _id, title, description, price } = await req.json();
+  const { _id, title, description, price, images } = await req.json();
   await Product.updateOne(
     // { _id: _id },
     // { title: title, description: description, price: price }
     { _id },
-    { title, description, price }
+    { title, description, price, images }
   );
 
   return NextResponse.json(true);

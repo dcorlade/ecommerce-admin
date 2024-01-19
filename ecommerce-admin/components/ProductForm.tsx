@@ -5,6 +5,7 @@ import { create } from 'domain';
 import { Types } from 'mongoose';
 import { redirect } from 'next/navigation';
 import { FormEvent, useState } from 'react';
+import Spinner from './Spinner';
 
 type Props = {
   _id?: Types.ObjectId;
@@ -34,9 +35,10 @@ export default function ProductForm({
   const [price, setPrice] = useState(existingPrice || '');
   const [goToProducts, setGoToProducts] = useState(false);
   const [images, setImages] = useState(existingImages || []);
+  const [isUploading, setIsUploading] = useState(false);
   async function saveProduct(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const data = { title, description, price };
+    const data = { title, description, price, images };
 
     if (_id) {
       //update
@@ -63,6 +65,7 @@ export default function ProductForm({
     const files = ev.target?.files;
 
     if (files?.length > 0) {
+      setIsUploading(true);
       //upload files
       const data = new FormData();
 
@@ -75,6 +78,8 @@ export default function ProductForm({
       setImages((oldImages) => {
         return [...oldImages, ...response.data.links];
       });
+
+      setIsUploading(false);
     }
   }
 
@@ -92,11 +97,20 @@ export default function ProductForm({
       <div className="mb-2 flex flex-wrap gap-2">
         {!!images?.length &&
           images.map((link) => (
-            <div key={link} className="inline-block h-24">
-              <img src={link} alt="" className="rounded-lg"></img>
+            <div key={link} className="inline-block h-24 w-24 ">
+              <img
+                src={link}
+                alt=""
+                className="rounded-lg object-cover h-full w-full"
+              ></img>
             </div>
           ))}
-        <label className="inline-block w-24 h-24 cursor-pointer border text-center flex flex-col items-center justify-center text-sm gap-1 text-gray-700 rounded-lg bg-gray-300">
+        {isUploading && (
+          <div className="h-24 flex items-center gap-1">
+            <Spinner />
+          </div>
+        )}
+        <label className="w-24 h-24 cursor-pointer border text-center flex flex-col items-center justify-center text-sm gap-1 text-gray-700 rounded-lg bg-gray-300">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
